@@ -1,7 +1,7 @@
 import logging
 from config import Configuration
 from finder import Finder
-from lib.exceptions import PhotorecFinderFilterException
+from lib.exceptions import ForensicFinderException
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
         finder.prepare()
         finder.run()
         exit(0)
-    except PhotorecFinderFilterException as expt:
+    except ForensicFinderException as expt:
         logging.error(expt)
         exit(1)
 

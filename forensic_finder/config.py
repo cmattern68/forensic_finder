@@ -28,17 +28,17 @@ class Configuration:
     def __init__(self):
         self._root_logger = None
         self._parser = ArgumentParser(
-            description="Process all photorec results to retrieve only interesting content."
+            description="Process all files and folder to retrieve only interesting content."
         )
         self._parser.add_argument(
             "source",
             metavar="<source>",
-            help="source folder of photorec findings to be used."
+            help="source folder of findings to be used."
         )
         self._parser.add_argument(
             "--dest",
             metavar="<dest>",
-            help="destination folder of photorec_finder_filter to be used.",
+            help="destination folder to be used.",
             required=False,
             dest="dest"
         )

@@ -1,18 +1,18 @@
-class PhotorecFinderFilterException(Exception):
+class ForensicFinderException(Exception):
     """
     Main class for all program related exceptions
     """
     pass
 
 
-class ConfigurationException(PhotorecFinderFilterException):
+class ConfigurationException(ForensicFinderException):
     """
     All exception that occurred within configuration scope
     """
     pass
 
 
-class FinderException(PhotorecFinderFilterException):
+class FinderException(ForensicFinderException):
     """
     All exception that occurred within finder scope
     """
