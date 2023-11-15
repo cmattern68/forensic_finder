@@ -1,10 +1,9 @@
-from rich import print
 from typing import Optional, List
 from argparse import ArgumentParser
 from pydantic import BaseModel, Field, ValidationError, validator
-from lib.logger import Logger
-from lib.exceptions import ConfigurationException
-from lib.file import File
+from forensic_finder.lib.logger import Logger
+from forensic_finder.lib.exceptions import ConfigurationException
+from forensic_finder.lib.file import File
 
 
 class ConfigurationModel(BaseModel):

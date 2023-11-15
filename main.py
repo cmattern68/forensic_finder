@@ -1,7 +1,7 @@
 import logging
-from config import Configuration
-from finder import Finder
-from lib.exceptions import ForensicFinderException
+from forensic_finder.config import Configuration
+from forensic_finder.finder import Finder
+from forensic_finder.lib.exceptions import ForensicFinderException
 
 
 def main():

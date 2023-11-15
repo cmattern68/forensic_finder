@@ -1,11 +1,13 @@
 import logging
 import math
 
-from rich import print
-from lib.utils import chunks
-from lib.folder import Folder
-from lib.exceptions import FinderException
-from config import ConfigurationModel
+from multiprocessing import Pool
+from forensic_finder.schema import ProcessParamSchema
+from forensic_finder.lib.utils import chunks
+from forensic_finder.lib.folder import Folder
+from forensic_finder.lib.exceptions import FinderException
+from forensic_finder.finder_process import FinderProcess
+from forensic_finder.config import ConfigurationModel
 
 
 class Finder:
@@ -36,9 +38,20 @@ class Finder:
             raise FinderException(f"{self._config.source_path} is empty.")
         folders_len = math.ceil(len(folders) / 100)
         folders_pool_size = folders_len if 1 <= folders_len <= self._config.max_process_pool else 1
-        self._folders_pool = list(chunks(folders, math.ceil(len(folders) / folders_pool_size)))
+        folders_pool = list(
+            chunks(folders, math.ceil(len(folders) / folders_pool_size))
+        )
+        for folders in folders_pool:
+            self._folders_pool.append(
+                ProcessParamSchema(
+                    folders=folders,
+                    config=self._config
+                )
+            )
         self._folders_pool_size = len(self._folders_pool)
         logging.debug(f"Split all folders into a pool of {str(self._folders_pool_size)} chunks.")
 
     def run(self):
         logging.debug(f"Filtering will run in {str(self._folders_pool_size)} process.")
+        with Pool(self._folders_pool_size) as p_pool:
+            p_pool.map((FinderProcess()).run, self._folders_pool)
