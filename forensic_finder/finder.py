@@ -29,10 +29,10 @@ class Finder:
                          f"").lower() == 'y':
                     Folder.delete(self._config.dest_path)
                     Folder.create(self._config.dest_path)
-                    logging.debug(f"{self._config.dest_path} folder purged.")
+                    logging.info(f"{self._config.dest_path} folder purged.")
             else:
                 Folder.create(self._config.dest_path)
-                logging.debug(f"{self._config.dest_path} folder created.")
+                logging.info(f"{self._config.dest_path} folder created.")
         folders = Folder.fetch_sub_folders(self._config.source_path)
         if len(folders) == 0:
             raise FinderException(f"{self._config.source_path} is empty.")
@@ -49,9 +49,10 @@ class Finder:
                 )
             )
         self._folders_pool_size = len(self._folders_pool)
-        logging.debug(f"Split all folders into a pool of {str(self._folders_pool_size)} chunks.")
+        logging.info(f"Split all folders into a pool of {str(self._folders_pool_size)} chunks.")
 
     def run(self):
-        logging.debug(f"Filtering will run in {str(self._folders_pool_size)} process.")
+        logging.info(f"Filtering will run in {str(self._folders_pool_size)} process.")
         with Pool(self._folders_pool_size) as p_pool:
             p_pool.map((FinderProcess()).run, self._folders_pool)
+        logging.info(f"All filtering processes have finished")

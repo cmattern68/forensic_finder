@@ -6,5 +6,4 @@ dev:
 
 run:
 	. ./venv/bin/activate && \
-	python3 main.py /home/corentin/Perso/Rosette/save_photorec --ext "ext.txt" --dest /home/corentin/Perso/result_filter_photorec --verbose --clamav
-	#python3 main.py /home/corentin/Perso/save_photorec --ext "ext.txt" --dest /home/corentin/Perso/result_filter_photorec --verbose --clamav
+	python3 main.py /home/corentin/Perso/Rosette/save_photorec --ext "ext.txt" --dest /home/corentin/Perso/result_filter_photorec --clamav

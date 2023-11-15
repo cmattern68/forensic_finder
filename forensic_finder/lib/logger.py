@@ -13,8 +13,12 @@ class Logger:
         debug_handler.setFormatter(formatter)
         if not verbose:
             debug_handler = logging.NullHandler()
+        info_handler = logging.StreamHandler(sys.stdout)
+        info_handler.setLevel(logging.INFO)
+        info_handler.setFormatter(formatter)
         error_handler = logging.StreamHandler(sys.stdout)
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(formatter)
         self._root.addHandler(debug_handler)
+        self._root.addHandler(info_handler)
         self._root.addHandler(error_handler)
