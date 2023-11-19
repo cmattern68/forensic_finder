@@ -17,3 +17,10 @@ class FinderException(ForensicFinderException):
     All exception that occurred within finder scope
     """
     pass
+
+
+class CorruptedFile(ForensicFinderException):
+    """
+    Corrupted File
+    """
+    pass

@@ -2,7 +2,7 @@ import logging
 import math
 
 from multiprocessing import Pool
-from forensic_finder.schema import ProcessParamSchema
+from forensic_finder.schema import ProcessParamSchema, FinderResult, RecoveringSchema
 from forensic_finder.lib.utils import chunks
 from forensic_finder.lib.folder import Folder
 from forensic_finder.lib.exceptions import FinderException
@@ -53,6 +53,16 @@ class Finder:
 
     def run(self):
         logging.info(f"Filtering will run in {str(self._folders_pool_size)} process.")
+        p_pool_results = []
         with Pool(self._folders_pool_size) as p_pool:
-            p_pool.map((FinderProcess()).run, self._folders_pool)
+            p_pool_results = p_pool.map((FinderProcess()).run, self._folders_pool)
+        if len(p_pool_results) == 0:
+            logging.debug(f"No file retrieved.")
+        else:
+            results = FinderResult(
+                total=RecoveringSchema()
+            )
+            for result in p_pool_results:
+                results.merge(result)
+            results.show()
         logging.info(f"All filtering processes have finished")

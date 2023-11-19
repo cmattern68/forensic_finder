@@ -2,11 +2,14 @@ import logging
 import os
 from rich import print
 from forensic_finder.lib.file import File
+from forensic_finder.lib.exceptions import CorruptedFile
 from forensic_finder.config import ConfigurationModel
 from forensic_finder.schema import Exif
 from PIL.ExifTags import TAGS
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, ImageFile, UnidentifiedImageError
 from imghdr import what
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 class FileManipulator:
@@ -30,7 +33,6 @@ class FileManipulator:
         image = None
         try:
             image = Image.open(self._path)
-            image.verify()
             exif = image.getexif()
             if len(exif) > 0:
                 exif_table = {}
@@ -43,13 +45,13 @@ class FileManipulator:
             logging.error(f"Unidentified image {self._path}. Probably corrupted.")
         except Exception as e:
             logging.error(f"Unable to retrieve exif data from {self._path}. Probably corrupted.")
-        if image is not None:
-            image.close()
 
     def get_file_metadata(self) -> None:
+        self._stat = os.stat(self._path)
+        if self._stat == 0:
+            raise CorruptedFile(f"File {self._path} is corrupted.")
         if what(self._path) is not None:
             self._get_exif()
-        self._stat = os.stat(self._path)
 
     def is_movable(self) -> bool:
         return True
